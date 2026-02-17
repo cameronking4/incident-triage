@@ -16,6 +16,8 @@
     "devin-playbook",
     "outputs",
     "fixtures",
+    "---Integrations---",
+    "supported-webhooks",
     "---Configuration---",
     "config-reference",
     "---CLI---",

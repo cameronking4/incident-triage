@@ -1,0 +1,76 @@
+---
+title: Supported Webhooks
+description: Event sources with native webhooks and setup requirements
+---
+
+# Supported Webhooks
+
+Incident Triage is evolving into an event-driven Devin orchestration platform. The bigger promise for enterprises: **configure a webhook to trigger Devin with prompt templates**. Connect alerts from any supported source—most provide native webhooks, so consumers paste a URL and go.
+
+## Vision: Event-Driven Devin Platform
+
+- **Configure once** — Connect Azure, AWS, PagerDuty, Prometheus, or others. Map each alert type to a prompt template.
+- **Managed harness** — Devin runs with your ACU limits, guardrails, and tags. No code changes for new sources—just config and a prompt.
+- **Extensible** — Web app, CLI, or GitHub Action; all react to the same events and share the same engine.
+
+## Native Webhooks (No Custom Code)
+
+These services POST directly to your webhook URL. Consumers configure a URL in the source’s UI or config—no Lambda, no custom scripts.
+
+| Service | What to configure | Events |
+|---------|-------------------|--------|
+| **Prometheus Alertmanager** | `webhook_configs` in alertmanager.yml | Firing alerts |
+| **Azure Monitor** | Action Group → Webhook action | Metric, log, activity alerts |
+| **PagerDuty** | Extensions → Webhook | Incident create/update |
+| **GitHub** | Repo/org webhooks | deployment_status, check_run, workflow_run |
+| **Datadog** | Integrations → Webhooks | Alert payloads |
+| **Grafana** | Alerting → Contact points → Webhook | Alert rules |
+| **Sentry** | Internal Integration as alert action | Issue alerts, metric alerts |
+| **PostHog** | Destinations → Webhook | Event data (real-time) |
+| **Vercel Deployments** | Settings → Webhooks (Pro/Enterprise) | Deployment created, succeeded, error, cancelled, promoted |
+
+### Quick Setup Examples
+
+**Prometheus (Alertmanager):**
+
+```yaml
+receivers:
+  - name: 'devin-triage'
+    webhook_configs:
+      - url: 'https://your-platform.com/webhook/prometheus'
+```
+
+**Azure Monitor:** Create Action Group → add Webhook action → paste URL.
+
+**Vercel:** Team Settings → Webhooks → select events (e.g. Deployment Error) → enter endpoint URL.
+
+## Requires a Bridge (Consumer or Platform)
+
+| Service | Limitation | Typical approach |
+|---------|------------|------------------|
+| **AWS CloudWatch Alarms** | No direct HTTP POST | CloudWatch → SNS → Lambda → POST to your webhook |
+| **PostHog (funnel alerts)** | Native webhook sends events, not “alert on funnel drop” | Use PostHog webhook with filters, or Zapier/Make for funnel-specific triggers |
+
+For AWS, a ready-made Lambda template (SNS → HTTP POST) reduces consumer setup to one deploy + paste webhook URL.
+
+## Not Alert Webhook Sources
+
+| Service | Why |
+|---------|-----|
+| **OpenTelemetry** | OTel is a telemetry spec (traces, metrics, logs). It exports to backends. Alerts come from whatever consumes OTel—Prometheus, Grafana, Datadog—and those have webhooks. |
+| **Vercel Analytics** | Web Analytics is for page views and Core Web Vitals. It is not an alerting system and has no webhook. |
+
+## Summary: Consumer Setup Effort
+
+| Source | Effort | Consumer action |
+|--------|--------|-----------------|
+| Prometheus | ~5 min | Edit alertmanager.yml, add webhook URL |
+| Azure Monitor | ~5–10 min | Create Action Group, add webhook, attach to alert rules |
+| PagerDuty | ~5 min | Add webhook extension to service |
+| GitHub | ~3 min | Add webhook in repo settings, select events |
+| Sentry | ~5 min | Create Internal Integration, add as alert action |
+| PostHog | ~5 min | Add webhook destination, configure URL |
+| Vercel Deployments | ~5 min | Settings → Webhooks, select events, add URL |
+| AWS CloudWatch | 15–30 min | Deploy Lambda (SNS → HTTP) or use platform-provided template |
+
+For most sources, setup is a few minutes per integration. A config UI that generates webhook URLs and provider-specific instructions makes it even easier.
