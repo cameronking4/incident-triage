@@ -19,6 +19,8 @@ signals:
   github:
     enabled: true
     events: [deployment_status, check_run, workflow_run]
+  stripe:
+    enabled: false
 
 services:
   - name: api

@@ -3,6 +3,7 @@ import { parsePrometheusPayload } from "./prometheus";
 import { parsePostHogPayload } from "./posthog";
 import { parseDeployPayload } from "./deploy";
 import { parseGitHubPayload } from "./github";
+import { parseStripePayload } from "./stripe";
 
 export type { IncidentPayload, TriggerKind } from "./types";
 export { createIncidentId } from "./types";
@@ -35,6 +36,9 @@ export function normalizePayload(
     }
     if (body.source === "deploy") {
       return parseDeployPayload(raw);
+    }
+    if (body.object === "event" && typeof body.type === "string" && (body.type as string).includes(".")) {
+      return parseStripePayload(raw);
     }
   }
 

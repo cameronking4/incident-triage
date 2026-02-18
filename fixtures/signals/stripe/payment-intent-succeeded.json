@@ -1,0 +1,16 @@
+{
+  "id": "evt_356d1d6b9ada497f8571ad9e",
+  "data": {
+    "object": {
+      "id": "pi_42be132a416c45249d51899f",
+      "amount": 2000,
+      "object": "payment_intent",
+      "status": "succeeded",
+      "currency": "usd",
+      "customer": "cus_0e3b5aed7e8c4e"
+    }
+  },
+  "type": "payment_intent.succeeded",
+  "object": "event",
+  "created": 1771412831
+}

@@ -1,4 +1,4 @@
-export type TriggerKind = "prometheus" | "posthog" | "deploy" | "github";
+export type TriggerKind = "prometheus" | "posthog" | "deploy" | "github" | "stripe";
 
 export interface IncidentPayload {
   id: string;
