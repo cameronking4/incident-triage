@@ -113,6 +113,24 @@ export function startWebhookServer(port: number): void {
       return;
     }
 
+    if (url === "/webhook/stripe") {
+      let payload: unknown;
+      try {
+        payload = JSON.parse(body);
+      } catch {
+        send(res, 400, "Invalid JSON");
+        return;
+      }
+      const incident = normalizePayload(payload);
+      if (!incident) {
+        send(res, 400, "Invalid Stripe payload");
+        return;
+      }
+      send(res, 200, "OK");
+      runTriageAsync(payload);
+      return;
+    }
+
     if (url === "/webhook/github") {
       const event = req.headers["x-github-event"] as string | undefined;
       if (!event) {
@@ -149,6 +167,7 @@ export function startWebhookServer(port: number): void {
     console.log("  POST /webhook/prometheus");
     console.log("  POST /webhook/deploy");
     console.log("  POST /webhook/posthog");
+    console.log("  POST /webhook/stripe");
     console.log("  POST /webhook/github (X-GitHub-Event: deployment_status | check_run | workflow_run)");
   });
 }

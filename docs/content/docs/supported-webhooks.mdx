@@ -27,6 +27,7 @@ These services POST directly to your webhook URL. Consumers configure a URL in t
 | **Grafana** | Alerting → Contact points → Webhook | Alert rules |
 | **Sentry** | Internal Integration as alert action | Issue alerts, metric alerts |
 | **PostHog** | Destinations → Webhook | Event data (real-time) |
+| **Stripe** | Developers → Webhooks | payment_intent.*, charge.*, invoice.*, etc. |
 | **Vercel Deployments** | Settings → Webhooks (Pro/Enterprise) | Deployment created, succeeded, error, cancelled, promoted |
 
 ### Quick Setup Examples
@@ -41,6 +42,10 @@ receivers:
 ```
 
 **Azure Monitor:** Create Action Group → add Webhook action → paste URL.
+
+**Stripe:**
+
+Dashboard → Developers → Webhooks → Add endpoint → paste `https://your-platform.com/webhook/stripe` → select events.
 
 **Vercel:** Team Settings → Webhooks → select events (e.g. Deployment Error) → enter endpoint URL.
 
@@ -70,6 +75,7 @@ For AWS, a ready-made Lambda template (SNS → HTTP POST) reduces consumer setup
 | GitHub | ~3 min | Add webhook in repo settings, select events |
 | Sentry | ~5 min | Create Internal Integration, add as alert action |
 | PostHog | ~5 min | Add webhook destination, configure URL |
+| Stripe | ~5 min | Add webhook endpoint in Stripe Dashboard, select events |
 | Vercel Deployments | ~5 min | Settings → Webhooks, select events, add URL |
 | AWS CloudWatch | 15–30 min | Deploy Lambda (SNS → HTTP) or use platform-provided template |
 

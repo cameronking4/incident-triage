@@ -28,6 +28,12 @@ const signalsSchema = z.object({
         .default(["deployment_status", "check_run", "workflow_run"]),
     })
     .default({}),
+  stripe: z
+    .object({
+      enabled: z.boolean().default(false),
+      events: z.array(z.string()).optional(),
+    })
+    .default({}),
 });
 
 const serviceSchema = z.object({
