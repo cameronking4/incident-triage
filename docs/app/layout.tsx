@@ -7,7 +7,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: { default: 'Telemetry Insights', template: '%s | Telemetry Insights' },
+  title: { default: 'Incident Triage', template: '%s | Incident Triage' },
   description: 'AI-driven incident triage: Alert → Devin → Root-cause report + telemetry PRs. POC-first, fixture-driven.',
 };
 
